@@ -1,6 +1,6 @@
 # PI Flower Incubator
 raspberry pi for flower incubator
-
-author : jaeyong park
-email : jaeyong1@naver_DOT_com
-site : yongslab.com
+<br>
+author : jaeyong park<br>
+email : jaeyong1@naver_DOT_com<br>
+site : yongslab.com<br>
