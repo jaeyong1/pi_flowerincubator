@@ -1,4 +1,4 @@
-# pi_flowerincubator
+# PI Flower Incubator
 raspberry pi for flower incubator
 
 author : jaeyong park
