@@ -3,8 +3,32 @@ import time
 import feedparser
 import RPi.GPIO as GPIO
 import urllib2 
+import datetime
 
-def getcommand():
+LONGSLEEPDURATION = 20 #30 sec, uses when there is no new command
+SHORTSLEEPDURATION = 2 #2 sec, uses after command processing
+
+def processcommand(command):
+	
+	if command.strip().upper() == "FAN OFF":
+		FanOff()
+	elif command.strip().upper() == "FAN ON":
+		FanOn()
+	elif command.strip().upper() == "LAMP ON":
+		LightOn()
+	elif command.strip().upper() == "LAMP OFF":
+		LightOff()
+	else:
+	  print("cannot process command")
+	
+	
+	
+def getcommand():	
+	#current date time ( 2017-01-01 13:23:45 )
+	print("---------------------")
+	now = time.localtime()	
+	s = "%04d-%02d-%02d %02d:%02d:%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
+	print s
 	#get command from db by xml
 	d = feedparser.parse('http://jaeyong1.cafe24.com/garden/get_remote_xml.php')
 	hasdata = d.feed.hasdata
@@ -17,12 +41,18 @@ def getcommand():
 		print (d.feed.command)
 		print (d.feed.state)
 		
+		processcommand(d.feed.command)
 		#set ok to db
 		rid = d.feed.rid
 		urllib2.urlopen("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid).read() #python 2
+		######################### PYTHON 3 ############################################
 		#print ("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid)
 		#	import urllib.request #python 3
 		#	urllib.request.urlopen("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid).read()
+		return True
+	else:
+		return False
+		
  
 def GPIOInit():
 	GPIO.setmode(GPIO.BCM)
@@ -30,16 +60,20 @@ def GPIOInit():
 	GPIO.setup(15, GPIO.OUT)	
 	
 def LightOn():
-	GPIO.output(14, True)
+	print("> LIGHT ON")
+	GPIO.output(15, True)
 
 def LightOff():
-	GPIO.output(14, False)
+	print("> LIGHT OFF")
+	GPIO.output(15, False)
 
 def FanOn():
-	GPIO.output(15, True)
+	print("> FAN ON")
+	GPIO.output(14, True)
 	
 def FanOff():
-	GPIO.output(15, False)
+	print("> FAN OFF")
+	GPIO.output(14, False)
 
 def _internal_GPIOcontrolTest():
 	GPIO.setmode(GPIO.BCM)
@@ -50,9 +84,17 @@ def _internal_GPIOcontrolTest():
 	GPIO.output(15, False)
 	GPIO.cleanup()
 
+def pisleep(sec):
+	time.sleep(sec) #1sec
 
+def whileloopthread():
+	while True:
+		while getcommand():
+			print("has command, check again after short sleep")
+			time.sleep(SHORTSLEEPDURATION)
+		print("no command, long sleep")
+		time.sleep(LONGSLEEPDURATION)
 
-hasda
 def main():
 	print("****************************************************")
 	print("PI FLOWER INCUBATOR")
@@ -63,13 +105,23 @@ def main():
 	print("  2) wait 1 min")
 	print("  3) get command again")
 	print("")
+	now = time.localtime()
+	s = "%04d-%02d-%02d %02d:%02d:%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
+	print s
+
+	GPIOInit()	
+	FanOff()
+	LightOn()
+	pisleep(0.5)
+	LightOff()
+	pisleep(0.5)
+	FanOn()
+	pisleep(0.5)
+	FanOff()
 	
-		
-	
-	for i in range(0,55):
-		print(i)
-		time.sleep(1) #1 sec
-		
+	t = threading.Thread(target=whileloopthread)
+	t.start()
+
 if __name__ == '__main__':
 	main()
 	
