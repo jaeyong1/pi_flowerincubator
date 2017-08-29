@@ -4,10 +4,15 @@ import time
 import feedparser
 import RPi.GPIO as GPIO
 import urllib2 
-import datetime
+import datetime, time
+from datetime import timedelta
+from picftp import takepicture_ftpuplod
+from tendo import singleton
+me = singleton.SingleInstance() #singleton process
 
 LONGSLEEPDURATION = 20 #30 sec, uses when there is no new command
 SHORTSLEEPDURATION = 2 #2 sec, uses after command processing
+PICTUREUPLOADDURATION = 300 #sec, take picture and upload to ftp server
 
 def processcommand(command):
 	
@@ -88,8 +93,26 @@ def _internal_GPIOcontrolTest():
 def pisleep(sec):
 	time.sleep(sec) #1sec
 
+def picftp(lastuploaded):
+	now = datetime.date.today()
+	td = timedelta(seconds = PICTUREUPLOADDURATION)
+	nextupload = lastuploaded + td
+	
+	if(now >= nextupload):
+		print("upload image now")
+		takepicture_ftpuplod()
+		return now
+	else:
+		print("do not upload new image")
+		return lastuploaded
+	
+	
+	
 def whileloopthread():
+	td_init = timedelta(seconds = PICTUREUPLOADDURATION)
+	lastuploaded = datetime.date.today() - td_init
 	while True:
+		lastuploaded = picftp(lastuploaded)
 		while getcommand():
 			print("has command, check again after short sleep")
 			time.sleep(SHORTSLEEPDURATION)
