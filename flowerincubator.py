@@ -5,7 +5,7 @@ import feedparser
 import RPi.GPIO as GPIO
 import urllib2 
 import datetime, time
-from datetime import timedelta
+from datetime import timedelta, datetime
 from picftp import takepicture_ftpuplod
 from tendo import singleton
 me = singleton.SingleInstance() #singleton process
@@ -94,7 +94,7 @@ def pisleep(sec):
 	time.sleep(sec) #1sec
 
 def picftp(lastuploaded):
-	now = datetime.date.today()
+	now = datetime.now()
 	td = timedelta(seconds = PICTUREUPLOADDURATION)
 	nextupload = lastuploaded + td
 	
@@ -110,7 +110,7 @@ def picftp(lastuploaded):
 	
 def whileloopthread():
 	td_init = timedelta(seconds = PICTUREUPLOADDURATION)
-	lastuploaded = datetime.date.today() - td_init
+	lastuploaded = datetime.now() - td_init
 	while True:
 		lastuploaded = picftp(lastuploaded)
 		while getcommand():
