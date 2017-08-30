@@ -8,25 +8,35 @@ import datetime, time
 from datetime import timedelta, datetime
 from picftp import takepicture_ftpuplod
 from tendo import singleton
-me = singleton.SingleInstance() #singleton process
+from c_incubator import *
+from getsetcurrentstate import *
+#me = singleton.SingleInstance() #singleton process
 
 LONGSLEEPDURATION = 20 #30 sec, uses when there is no new command
 SHORTSLEEPDURATION = 2 #2 sec, uses after command processing
 PICTUREUPLOADDURATION = 300 #sec, take picture and upload to ftp server
+global incubator
 
 def processcommand(command):
-	
+	global incubator
 	if command.strip().upper() == "FAN OFF":
 		FanOff()
+		incubator.fan = 0
+		setserverstate(incubator)
 	elif command.strip().upper() == "FAN ON":
 		FanOn()
+		incubator.fan = 1
+		setserverstate(incubator)
 	elif command.strip().upper() == "LAMP ON":
 		LightOn()
+		incubator.lamp = 1
+		setserverstate(incubator)
 	elif command.strip().upper() == "LAMP OFF":
 		LightOff()
+		incubator.lamp = 0
+		setserverstate(incubator)
 	else:
 	  print("cannot process command")
-	
 	
 	
 def getcommand():	
@@ -125,14 +135,11 @@ def main():
 	print("")	
 	print("https://github.com/jaeyong1/pi_flowerincubator/wiki")	
 	print("****************************************************")
-	print("  1) get command from web site")
-	print("  2) wait 1 min")
-	print("  3) get command again")
-	print("")
 	now = time.localtime()
 	s = "%04d-%02d-%02d %02d:%02d:%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
 	print s
 
+	#init operation
 	GPIOInit()	
 	FanOff()
 	LightOn()
@@ -142,6 +149,20 @@ def main():
 	FanOn()
 	pisleep(0.5)
 	FanOff()
+	
+	#get previous status from server
+	print("get previous status from server")
+	global incubator
+	incubator = getserverstate()
+	print(incubator.lamp)
+	print(incubator.fan)
+	print(incubator.humidity)
+	print(incubator.temperature)
+	if(incubator.lamp=='1'):
+		LightOn()
+			
+	if (incubator.fan=='1'):
+		FanOn()
 	
 	t = threading.Thread(target=whileloopthread)
 	t.start()
