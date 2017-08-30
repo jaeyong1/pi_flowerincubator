@@ -14,7 +14,7 @@ from getsetcurrentstate import *
 
 LONGSLEEPDURATION = 20 #30 sec, uses when there is no new command
 SHORTSLEEPDURATION = 2 #2 sec, uses after command processing
-PICTUREUPLOADDURATION = 300 #sec, take picture and upload to ftp server
+PICTUREUPLOADDURATION = 3600 #3600sec, every 1 hour, take picture and upload to ftp server
 global incubator
 
 def processcommand(command):
