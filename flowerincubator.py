@@ -10,7 +10,7 @@ from picftp import takepicture_ftpuplod
 from tendo import singleton
 from c_incubator import *
 from getsetcurrentstate import *
-#me = singleton.SingleInstance() #singleton process
+me = singleton.SingleInstance() #singleton process
 
 LONGSLEEPDURATION = 20 #30 sec, uses when there is no new command
 SHORTSLEEPDURATION = 2 #2 sec, uses after command processing
