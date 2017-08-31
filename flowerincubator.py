@@ -119,7 +119,7 @@ def picftp(lastuploaded):
 	
 	
 def whileloopthread():
-	td_init = timedelta(seconds = PICTUREUPLOADDURATION)
+	td_init = timedelta(seconds = (PICTUREUPLOADDURATION + 100))
 	lastuploaded = datetime.now() - td_init
 	while True:
 		lastuploaded = picftp(lastuploaded)
