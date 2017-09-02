@@ -1,8 +1,8 @@
 class Incubator:
 	lamp = 0
 	fan = 0
-	humidity = 0
-	temperature = 0
+	humidity = 0.0
+	temperature = 0.0
 	issetted = 0
 	
 	def __init__(self, lamp, fan, humidity, temperature):

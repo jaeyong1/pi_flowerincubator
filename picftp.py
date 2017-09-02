@@ -9,7 +9,7 @@ def takepicture_ftpuplod():
 	#print curpath
 	now = time.localtime()	
 	s = "%04d-%02d-%02d_%02d-%02d-%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
-	#print s
+	print s
 	shellcmd = "raspistill -o " + curpath + "/"+ s +".jpg"
 	#print shellcmd
 	print("take picture after 5 sec")

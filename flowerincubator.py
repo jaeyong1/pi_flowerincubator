@@ -9,6 +9,7 @@ from datetime import timedelta, datetime
 from picftp import takepicture_ftpuplod
 from tendo import singleton
 from c_incubator import *
+from getht import *
 from getsetcurrentstate import *
 me = singleton.SingleInstance() #singleton process
 
@@ -37,8 +38,8 @@ def processcommand(command):
 		setserverstate(incubator)
 	else:
 	  print("cannot process command")
-	
-	
+
+
 def getcommand():	
 	#current date time ( 2017-01-01 13:23:45 )
 	print("---------------------")
@@ -116,12 +117,31 @@ def picftp(lastuploaded):
 		print("do not upload new image")
 		return lastuploaded
 	
-	
+def updatehumidtemp():
+	lst=["",""]
+	if (get_humidity_temperature(lst) == True):
+		humidity = float(lst[0])
+		temperature = float(lst[1])
+		print("[fl] humidity = " + str(humidity))
+		print("[fl] temperature = " + str(temperature))
+		ischanged = False
+		global incubator
+		if (abs(float(incubator.humidity) - humidity)>=0.1):
+			incubator.humidity = humidity
+			ischanged = True;
+		if (abs(float(incubator.temperature) - temperature)>=0.1):
+			incubator.temperature = temperature
+			ischanged = True;
+		if(ischanged == True):
+			setserverstate(incubator)
+
+			
 	
 def whileloopthread():
 	td_init = timedelta(seconds = (PICTUREUPLOADDURATION + 100))
 	lastuploaded = datetime.now() - td_init
 	while True:
+		updatehumidtemp()
 		lastuploaded = picftp(lastuploaded)
 		while getcommand():
 			print("has command, check again after short sleep")
