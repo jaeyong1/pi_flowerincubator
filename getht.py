@@ -12,12 +12,15 @@
 # @author jaeyongyong park (yongslab.com)
 
 import subprocess
+import os
+
 
 def get_humidity_temperature(returnlst):	
 	curpath = os.getcwd()
-	batcmd= "." + curpath + "/dht.lib"
+	batcmd= curpath + "/dht.lib"
+	print(batcmd)
 	resultbat = subprocess.check_output(batcmd, shell=True)
-	#print("----\n" + resultbat + "------")
+	print("----\n" + resultbat + "------")
 	lstbat = resultbat.split('\n')
 	for i in range (0, len(lstbat)):
 		if "Failed" in lstbat[i]:
