@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Get humidity and temperature
+# Get humidity and temperature from DHT22 sensor
 # This file uses the precompiled C library.
 # The data line of the DHT22 sensor is connected to the raspberry pi GPIO #22.
 # ----------------------
@@ -7,11 +7,15 @@
 # PIN1-VCC3.3 
 # PIN9-GND
 # PIN15-GPIO#22
+#
+# @link : https://github.com/jaeyong1/pi_flowerincubator/wiki/Get-temperature-and-humidity/
+# @author jaeyongyong park (yongslab.com)
 
 import subprocess
 
-def get_humidity_temperature(returnlst):
-	batcmd="./dht.lib"
+def get_humidity_temperature(returnlst):	
+	curpath = os.getcwd()
+	batcmd= "." + curpath + "/dht.lib"
 	resultbat = subprocess.check_output(batcmd, shell=True)
 	#print("----\n" + resultbat + "------")
 	lstbat = resultbat.split('\n')
