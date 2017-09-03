@@ -15,8 +15,8 @@ import subprocess
 import os
 
 
-def get_humidity_temperature(returnlst):	
-	curpath = os.getcwd()
+def get_humidity_temperature(returnlst):
+	curpath = os.path.dirname(os.path.abspath(__file__))
 	batcmd= curpath + "/dht.lib"
 	print(batcmd)
 	resultbat = subprocess.check_output(batcmd, shell=True)
