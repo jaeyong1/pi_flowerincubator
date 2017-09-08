@@ -46,29 +46,36 @@ def getcommand():
 	now = time.localtime()	
 	s = "%04d-%02d-%02d %02d:%02d:%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
 	print s
-	#get command from db by xml
-	d = feedparser.parse('http://jaeyong1.cafe24.com/garden/get_remote_xml.php')
-	hasdata = d.feed.hasdata
-	print("hasdata:" + hasdata)
+	hasdata = "0"
 	
-	#parse xml
-	if int(hasdata) != 0:
-		print (d.feed.rid)
-		print (d.feed.timestamp)
-		print (d.feed.command)
-		print (d.feed.state)
+	try:
+		#get command from db by xml
+		d = feedparser.parse('http://jaeyong1.cafe24.com/garden/get_remote_xml.php')
+		hasdata = d.feed.hasdata
+		print("hasdata:" + hasdata)
 		
-		processcommand(d.feed.command)
-		#set ok to db
-		rid = d.feed.rid
-		urllib2.urlopen("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid).read() #python 2
-		######################### PYTHON 3 ############################################
-		#print ("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid)
-		#	import urllib.request #python 3
-		#	urllib.request.urlopen("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid).read()
-		return True
-	else:
-		return False
+		#parse xml
+		if int(hasdata) != 0:
+			print (d.feed.rid)
+			print (d.feed.timestamp)
+			print (d.feed.command)
+			print (d.feed.state)
+			
+			processcommand(d.feed.command)
+			#set ok to db
+			rid = d.feed.rid
+			urllib2.urlopen("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid).read() #python 2
+			######################### PYTHON 3 ############################################
+			#print ("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid)
+			#	import urllib.request #python 3
+			#	urllib.request.urlopen("http://jaeyong1.cafe24.com/garden/set_remote_ok.php?rid="+rid).read()
+			return True
+		else:
+			return False
+			
+	except:
+		print("Faile to access the server!!")
+		return False	
 		
  
 def GPIOInit():
