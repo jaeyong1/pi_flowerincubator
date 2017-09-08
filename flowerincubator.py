@@ -49,7 +49,7 @@ def getcommand():
 	hasdata = "0"
 	
 	try:
-		#get command from db by xml
+		print("get command from db by xml")
 		d = feedparser.parse('http://jaeyong1.cafe24.com/garden/get_remote_xml.php')
 		hasdata = d.feed.hasdata
 		print("hasdata:" + hasdata)
@@ -118,8 +118,10 @@ def picftp(lastuploaded):
 	
 	if(now >= nextupload):
 		print("upload image now")
-		takepicture_ftpuplod()
-		return now
+		if (takepicture_ftpuplod()==True):
+			return now
+		else:
+			return lastuploaded
 	else:
 		print("do not upload new image")
 		return lastuploaded

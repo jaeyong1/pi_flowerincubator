@@ -23,11 +23,13 @@ def takepicture_ftpuplod():
 		
 		print("try to upload pic file")
 		os.system("sshpass -p qkrwodyd1! scp " + curpath + "/"+ s +".jpg jaeyong1@jaeyong1.cafe24.com:www/garden/pictures")
+
 		os.system("rm " + curpath + "/"+ s +".jpg")
+		return True
 		
 	except:
 		print("takepicture_ftpuplod() failed")
-		return
+		return False
  
  
 
