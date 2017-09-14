@@ -11,6 +11,7 @@ from tendo import singleton
 from c_incubator import *
 from getht import *
 from getsetcurrentstate import *
+from tryping import *
 me = singleton.SingleInstance() #singleton process
 
 LONGSLEEPDURATION = 20 #30 sec, uses when there is no new command
@@ -167,6 +168,11 @@ def main():
 	now = time.localtime()
 	s = "%04d-%02d-%02d %02d:%02d:%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
 	print s
+	
+	#daemon. loop. ping to AP
+	t = threading.Thread(target=start_ping_loop, args=())
+	t.daemon = True
+	t.start()
 
 	#init operation
 	GPIOInit()	
