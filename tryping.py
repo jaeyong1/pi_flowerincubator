@@ -20,7 +20,7 @@ def start_ping_loop():
 	while True:
 		pingstatus = check_ping()
 		#print(pingstatus)  ## warning! too much print
-		time.sleep(0.5)
+		time.sleep(2)
 		
 def main():
 	t = threading.Thread(target=start_ping_loop, args=())
