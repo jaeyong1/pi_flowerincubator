@@ -3,10 +3,19 @@ import os;
 import time
 import urllib2 
 import datetime
-
+def isexist_passwordfile():
+	curpath = os.path.dirname(os.path.abspath(__file__)) #this file path
+	if (os.path.isfile(curpath + "/ftppassword.txt") == False):
+		print("Password file not exist!!")
+		print("Path : " + curpath + "/ftppassword.txt")
+		return False
+	
+	return True
+	
 def takepicture_ftpuplod():
 	try:
-		curpath = os.getcwd()
+		#curpath = os.path.dirname(os.path.abspath(__file__))  #this file path
+		curpath = os.getcwd()  #current running path
 		#print curpath
 		now = time.localtime()	
 		s = "%04d-%02d-%02d_%02d-%02d-%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
@@ -22,9 +31,10 @@ def takepicture_ftpuplod():
 		os.system(resizecmd)
 		
 		print("try to upload pic file")
-		os.system("sshpass -p qkrwodyd1! scp " + curpath + "/"+ s +".jpg jaeyong1@jaeyong1.cafe24.com:www/garden/pictures")
+		os.system("sshpass -f " + curpath + "/ftppassword.txt scp " + curpath + "/"+ s +".jpg jaeyong1@jaeyong1.cafe24.com:www/garden/pictures")
 
 		os.system("rm " + curpath + "/"+ s +".jpg")
+		print("upload complete")
 		return True
 		
 	except:
@@ -34,6 +44,9 @@ def takepicture_ftpuplod():
  
 
 def main():
+	if (isexist_passwordfile()==False):
+		print("password file not exist!!")
+		exit()
 	takepicture_ftpuplod()
 
 if __name__ == '__main__':

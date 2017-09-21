@@ -25,8 +25,6 @@ include 'get_remote.php';
 	<br>
 	<input type="button" value="Lamp Off" name="submitbtn1" OnClick="javascript:newCommand('Lamp Off');">
 	<br>
-	<input type="button" value="Fan On 10Min" name="submitbtn1" OnClick="javascript:newCommand('Fan On 10Min');">
-	<br>
 	<input type="button" value="Fan On" name="submitbtn1" OnClick="javascript:newCommand('Fan On');">
 	<br>
 	<input type="button" value="Fan OFF" name="submitbtn1" OnClick="javascript:newCommand('Fan OFF');">

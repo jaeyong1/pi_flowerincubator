@@ -7,6 +7,7 @@ import urllib2
 import datetime, time
 from datetime import timedelta, datetime
 from picftp import takepicture_ftpuplod
+from picftp import isexist_passwordfile
 from tendo import singleton
 from c_incubator import *
 from getht import *
@@ -165,6 +166,10 @@ def main():
 	print("")	
 	print("https://github.com/jaeyong1/pi_flowerincubator/wiki")	
 	print("****************************************************")
+	if (isexist_passwordfile()==False):
+		print("password file not exist!!")
+		exit()
+	
 	now = time.localtime()
 	s = "%04d-%02d-%02d %02d:%02d:%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
 	print s
